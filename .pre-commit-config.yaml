@@ -1,0 +1,32 @@
+# Starter .pre-commit-config.yaml — copy into a repo root as `.pre-commit-config.yaml`,
+# then run `pre-commit install`.
+#
+# Secret scanning strategy (2026 consensus):
+#   gitleaks at the edge (here, pre-commit) + trufflehog --only-verified in CI.
+# On ANY real hit: rotate the credential FIRST. Scrubbing history does not invalidate it.
+
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=5000"]
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-json
+
+  # Python projects — uncomment
+  # - repo: https://github.com/astral-sh/ruff-pre-commit
+  #   rev: v0.15.0
+  #   hooks:
+  #     - id: ruff
+  #       args: [--fix]
+  #     - id: ruff-format
